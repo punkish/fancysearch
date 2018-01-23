@@ -39,14 +39,19 @@ const makeFsContainer = function() {
     fsp.appendChild(fsc);
     fs.appendChild(fsp);
 
-    fskInput.addEventListener('keypress', modifyEnterKey, false);
-    fsvInput.addEventListener('keypress', modifyEnterKey, false);
+    fskInput.addEventListener('keydown', modifyKeyPress);
+    fsvInput.addEventListener('keydown', modifyKeyPress);
     fsc.addEventListener('click', removeFsp);
 };
 
-const modifyEnterKey = function(event) {
+const modifyKeyPress = function(event) {
+    
+    const ENTER = 13;
+    const BACKSPACE = 8;
+    const DEL = 46;
+
     event = event || window.event;
-    const charCode = event.which || event.keyCode;
+    const keyPressed = event.which || event.keyCode;
 
     let thisInput = event.target;
     let fsp = thisInput.parentElement;
@@ -56,7 +61,7 @@ const modifyEnterKey = function(event) {
     let fsvInput = fsp.children[3];
     let fsc = fsp.children[4];
     
-    if (charCode == 13) {
+    if (keyPressed == ENTER) {
         
         if (fsk.innerText === 'TEXT:' && fsvInput.value !== '') {
             fsp.className = 'fs-param-filled';
@@ -77,7 +82,7 @@ const modifyEnterKey = function(event) {
         event.stopPropagation();
         return false;
     }
-    else if (charCode == 8) {
+    else if (keyPressed == BACKSPACE || keyPressed == DEL) {
 
         if (thisInput.value === '') {
             let allFsp = document.querySelectorAll('.fs-param-filled');
