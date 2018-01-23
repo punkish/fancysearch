@@ -1,0 +1,124 @@
+body {
+    font-size: 18px;
+}
+.fs {
+    width: 180px;
+    height: auto;
+    min-height: 36px;
+    border: 1px solid grey;
+    font-family: sans-serif;
+    font-size: 0.8em;
+    padding: 0px;
+    float: left;
+}
+.fs-param-empty {
+    float: left;
+    position: relative;
+    border: 0px solid grey;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 1px 1px 3px;
+    margin: 1px;
+}
+.fs-param-filled {
+    float: left;
+    position: relative;
+    border: 1px solid grey;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 1px 1px 3px;
+    margin: 1px;
+}
+.fs-key,
+.fs-val {
+    float: left;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 0px solid red;
+}
+.fs-key {
+    color: #777;
+    font-weight: 200;
+    font-size: 80%;
+    text-transform: uppercase;
+    padding-right: 0;
+}
+.fs-val {
+    color: black;
+    margin-bottom: 2px;
+}
+.fs-key-input,
+.fs-val-input {
+    width: 100%;
+    height: 30px;
+    box-sizing: border-box;
+    border: 0px solid lightgrey;
+    margin: 0;
+    margin-top: -4px;
+}
+input:focus {
+    outline: none;
+}
+.fs-cancel {
+    float: left;
+    width: 25px;
+    height: 24px;
+    margin-left: 5px;
+    margin-top: -5px;
+    padding-top: 2px;
+    /* background: no-repeat center/70% url(../img/cancel.png); */
+    cursor: pointer;
+    text-align: center;
+    border: 1px solid grey;
+    border-radius: 5px;
+    background-color: lightgray
+}
+.fs-cancel:hover {
+    background: red;
+}
+.off {
+    display: none;
+    visibility: hidden;
+}
+.on {
+    visibility: visible;
+}
+.hilite {
+    background-color: #ccc;
+}
+.autocomplete-suggestions {
+    border: 1px solid lightgrey !important;
+    margin-top: 2px;
+}
+#qs {
+    margin-top: 2em;
+    font-family: sans-serif;
+    font-size: 0.9em;
+}
+/* Larger than mobile */
+@media (min-width: 300px) {
+}
+
+/* Larger than phablet */
+@media (min-width: 550px) {
+    .fs {
+        width: 80%;
+    }
+}
+
+/* Larger than tablet */
+@media (min-width: 750px) {
+}
+
+/* Larger than desktop */
+@media (min-width: 1000px) {
+}
+
+/* Larger than Desktop HD */
+@media (min-width: 1200px) {
+}
+
