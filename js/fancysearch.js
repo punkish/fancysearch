@@ -1,8 +1,18 @@
-const fancySearch = function () {
+/*
+    JavaScript fancySearch
+    created by P Kishor
+    GitHub: https://github.com/punkish/fancysearch
+    License: Released into the public domain under CC0
+*/
 
+const fancySearch = (function() {
+
+    // fsDiv is the container in which fancySearch is created
+    // Everything happens inside fsDiv. It is set during init()
+    let fsDiv;
     let facetKeys;
 
-	const makeFsContainer = function(selector) {
+	const makeFsContainer = function() {
 
         // We are going to create the following HTML
         /*
@@ -41,13 +51,16 @@ const fancySearch = function () {
         fsp.appendChild(fsv);
         fsp.appendChild(fsvInput);
         fsp.appendChild(fsc);
-        selector.appendChild(fsp);
+        fsDiv.appendChild(fsp);
     
         fskInput.addEventListener('keydown', modifyKeyPress);
         fsvInput.addEventListener('keydown', modifyKeyPress);
         fsc.addEventListener('click', removeFsp);
+
+        aCfacets('key', fskInput, facetKeys);
+        fskInput.focus();
     };
-    
+
     const modifyKeyPress = function(event) {
         
         const ENTER = 13;
@@ -74,12 +87,7 @@ const fancySearch = function () {
                 fsvInput.className = 'off';
                 fsc.className = 'fs-cancel on';
     
-                makeFsContainer(fs);
-    
-                let fskInputColl = document.querySelectorAll('input[class="fs-key-input"]');
-                let nextInput = fskInputColl[fskInputColl.length - 1];
-                aCfacets('key', nextInput, facetKeys);
-                nextInput.focus();
+                makeFsContainer();
             }
     
             event.preventDefault();
@@ -89,7 +97,8 @@ const fancySearch = function () {
         else if (keyPressed == BACKSPACE || keyPressed == DEL) {
     
             if (thisInput.value === '') {
-                let allFsp = document.querySelectorAll('.fs-param-filled');
+
+                let allFsp = document.querySelectorAll(`div#${fsDiv.id} div.fs-param-filled`);
                 let lastFsp = allFsp[allFsp.length - 1];
     
                 if (lastFsp.className === 'fs-param-filled') {
@@ -180,25 +189,15 @@ const fancySearch = function () {
                         }
                     }
     
-                    makeFsContainer(fs);
-    
-                    let fskInputColl = document.querySelectorAll('input[class="fs-key-input"]');
-                    let nextInput = fskInputColl[fskInputColl.length - 1];
-                    aCfacets('key', nextInput, facetKeys);
-                    nextInput.focus();
+                    makeFsContainer();
                 }
             }
         });
     };
 
-
 	return  {
         
         result: function() {
-        
-            // let fskInputColl = document.querySelectorAll('input[class="fs-key-input"]');
-            // let lastInput = fskInputColl[fskInputColl.length - 1];
-            // lastInput.className = 'off';
         
             const params = fs.childNodes;
             let q = {};
@@ -228,17 +227,13 @@ const fancySearch = function () {
             return q;
         },
 
-		init: function(o) {
-
-            // https://stackoverflow.com/questions/7028145/find-key-name-in-hash-with-only-one-key
-            facetKeys = o.facets.map(element => { return element['key'] });
+		init: function(selector, facets) {
             
-            makeFsContainer(o.selector);
-            let fskInputColl = document.querySelectorAll('input[class="fs-key-input"]');
-            let fskInput = fskInputColl[fskInputColl.length - 1];
-            aCfacets('key', fskInput, facetKeys);
-            fskInput.focus();
+            // https://stackoverflow.com/questions/7028145/find-key-name-in-hash-with-only-one-key
+            facetKeys = facets.map(element => { return element['key'] });
+            fsDiv = selector;
+            
+            makeFsContainer();
 		}
 	};
-
-}();
+})();

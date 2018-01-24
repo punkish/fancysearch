@@ -39,16 +39,16 @@
 
         <p class="u-cf">You should be ashamed of the above. Instead, try…</p>
     </div>
+    
     <div class="row">
         <div class="twelve columns">
             <h4>Fancy Search</h4>
         
             <p>Faceted search for multiple keys and values</p>
-            <!-- <form method="GET" action="/search"> -->
-                <div id="fs" class="fs"></div>
-                <button class="button-primary" id="go">Go</button>
-            <!-- </form> -->
-
+            <div id="fs" class="fs"></div>
+            <div id="foo"></div>
+            <button class="button-primary" id="go">Go</button>
+            
             <pre class="u-cf"><code id="qs" class="off"></code></pre>
 
             <h4>Installation and Usage</h4>
@@ -111,10 +111,7 @@
         //      any id, but don't change its className
         //   facets: The data structure you created to hold
         //      the facets with which you want to search
-        fancySearch.init({
-            selector: document.getElementById('fs'), 
-            facets: facets
-        });
+        fancySearch.init(document.getElementById('fs'), facets);
     };
 &lt;/script&gt;
                 </code></pre>
@@ -122,7 +119,6 @@
         </div>
     </div>
 </div>
-
 <script src="JavaScript-autoComplete/auto-complete.js"></script>
 <script src="js/fancysearch.js"></script>
 <script src="js/facets.js"></script>
@@ -156,10 +152,7 @@ window.onload = function() {
         qs.className = 'on';
     });
 
-    fancySearch.init({
-        selector: document.getElementById('fs'), 
-        facets: facets
-    });
+    fancySearch.init(document.getElementById('fs'), facets);
 };
 </script>
 </body>
