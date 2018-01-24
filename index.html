@@ -22,8 +22,6 @@
             <p>You are very proud of the above. But your client asks you to allow searching with more granular parameters such as countries and multiple authors besides free text. You end up with…</p>
         </div>
     </div>
-
-    
     <div class="row">
         <div class="twelve columns">
             <h4>Ghastly Search</h4>
@@ -41,21 +39,88 @@
 
         <p class="u-cf">You should be ashamed of the above. Instead, try…</p>
     </div>
-
-            
     <div class="row">
         <div class="twelve columns">
             <h4>Fancy Search</h4>
         
             <p>Faceted search for multiple keys and values</p>
-            <form method="GET" action="/search">
+            <!-- <form method="GET" action="/search"> -->
                 <div id="fs" class="fs"></div>
                 <button class="button-primary" id="go">Go</button>
-            </form>
+            <!-- </form> -->
 
-<pre class="u-cf"><code id="qs" class="off"></code></pre>
+            <pre class="u-cf"><code id="qs" class="off"></code></pre>
 
-    <div class="row" style="height: 200px;"></div>
+            <h4>Installation and Usage</h4>
+        
+            <ul>
+                <li>In your web page, add links to Pixabay's <a href="https://goodies.pixabay.com/javascript/auto-complete/demo.html" target="_blank">autoComplete</a> JS and CSS</li>
+                <li>Add links to <a href="https://github.com/punkish/fancysearch" target="_blank">fancySearch</a> JS and CSS</li>
+                <li>Add link to your <code>facets</code> data, either inline or as a separate JS</li>
+                <li>Create the search div</li>
+                <li>Add 'click' <code>eventListener</code> to your form button to execute <code>fancySearch.result()</code></li>
+                <li>Initialize <code>fancySearch.init()</code></li>
+            </ul>
+
+            <p>Your web page will look something as follows:<br>
+                <pre class="u-cf"><code>
+&lt;head&gt;
+…
+&lt;link rel=&quot;stylesheet&quot; href=&quot;path/to/fancysearch.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;path/to/auto-complete.css&quot;&gt;
+…
+&lt;/head&gt;
+…
+&lt;div id=&quot;fs&quot; class=&quot;fs&quot;&gt;&lt;/div&gt;
+&lt;button class=&quot;button-primary&quot; id=&quot;go&quot;&gt;Go&lt;/button&gt;
+…
+&lt;script src=&quot;path/to/auto-complete.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;path/to/fancysearch.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+
+    // The following can also be loaded via an external JS
+    const facets = [
+        {   "key": "free text", 
+            "values": [], 
+            "noDuplicates": true },
+        {   "key": "authors", 
+            "values": ["William Shakespeare, Rabindranath Tagore, Max Weber, Charles Baudelaire" …], 
+            "noDuplicates": true },
+        {   "key": "countries", 
+            "values": ["Afghanistan","Aland Islands","Albania","Algeria" …], 
+            "noDuplicates": false }
+    ];
+
+    window.onload = function() {
+        document.getElementById('go').addEventListener('click', function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            let query = fancySearch.result();
+            
+            // Do whatever you want with the query, for
+            // example, send it to the server to get 
+            // results. Since the result is a JSON object, 
+            // you may want to stringify it first with 
+            // `JSON.stringify(query)` if you want to display 
+            // it on the web page
+        });
+
+        // Initialize fancySearch()
+        //   selector: The 'div' you create above. It can have
+        //      any id, but don't change its className
+        //   facets: The data structure you created to hold
+        //      the facets with which you want to search
+        fancySearch.init({
+            selector: document.getElementById('fs'), 
+            facets: facets
+        });
+    };
+&lt;/script&gt;
+                </code></pre>
+            </p>
+        </div>
+    </div>
 </div>
 
 <script src="JavaScript-autoComplete/auto-complete.js"></script>
@@ -75,18 +140,26 @@ const fillGhastly = function(selector, facet, choices, multiple) {
     selector.innerHTML = html;
 };
 
-const fs = document.getElementById('fs');
-const go = document.getElementById('go');
-const qs = document.getElementById('qs');
-
 window.onload = function() {
 
-    const au = document.getElementById('au');
-    const cn = document.getElementById('cn');
-    fillGhastly(au, 'authors', facets[1]['values'], true);
-    fillGhastly(cn, 'countries', facets[2]['values'], false);
+    fillGhastly(document.getElementById('au'), 'authors', facets[1]['values'], true);
+    fillGhastly(document.getElementById('cn'), 'countries', facets[2]['values'], false);
 
-    fancySearch(fs, go, facets);
+    const qs = document.getElementById('qs');
+    
+    document.getElementById('go').addEventListener('click', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        let query = fancySearch.result();
+        qs.innerHTML = JSON.stringify(query);
+        qs.className = 'on';
+    });
+
+    fancySearch.init({
+        selector: document.getElementById('fs'), 
+        facets: facets
+    });
 };
 </script>
 </body>
