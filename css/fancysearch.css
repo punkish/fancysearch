@@ -1,12 +1,21 @@
 body {
-    font-size: 18px;
+    font-size: 2em;
+    font-family: serif;
+}
+code {
+	font-family: Menlo, Monaco, 'Courier New', monospace;
+    font-size: 80%;
+    overflow-x: auto;
+    max-width: 300px !important;
+}
+p, li {
+    font-size: 200%;
 }
 .fs {
     width: 180px;
     height: auto;
     min-height: 36px;
     border: 1px solid grey;
-    font-family: sans-serif;
     font-size: 0.8em;
     padding: 0px;
     float: left;
@@ -22,6 +31,18 @@ body {
     padding: 6px 1px 1px 3px;
     margin: 1px;
 }
+.fs-param-empty {
+    float: left;
+    position: relative;
+    border: 1px solid white;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 5px;
+    background-color: white;
+}
 .fs-param-filled {
     float: left;
     position: relative;
@@ -30,8 +51,9 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 6px 1px 1px 3px;
-    margin: 1px;
+    padding: 0;
+    margin: 5px;
+    background-color: lightgrey;
 }
 .fs-key,
 .fs-val {
@@ -41,15 +63,17 @@ body {
     border: 0px solid red;
 }
 .fs-key {
-    color: #777;
-    font-weight: 200;
-    font-size: 80%;
-    text-transform: uppercase;
-    padding-right: 0;
+    color: lightgrey;
+    background-color: grey;
+    height: 100%;
+    float: left;
 }
 .fs-val {
     color: black;
-    margin-bottom: 2px;
+    margin-bottom: 0px;
+    background-color: lightgrey;
+    height: 100%;
+    float: right;
 }
 .fs-key-input,
 .fs-val-input {
@@ -65,17 +89,19 @@ input:focus {
 }
 .fs-cancel {
     float: left;
-    width: 25px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     margin-left: 5px;
-    margin-top: -5px;
-    padding-top: 2px;
-    /* background: no-repeat center/70% url(../img/cancel.png); */
+    margin-top: -1px;
+    margin-right: 2px;
+    padding-top: 0px;
     cursor: pointer;
     text-align: center;
     border: 1px solid grey;
     border-radius: 5px;
-    background-color: lightgray
+    background-color: white;
+    font-size: 0.8em;
+    font-weight: 200;
 }
 .fs-cancel:hover {
     background: red;
@@ -88,7 +114,7 @@ input:focus {
     visibility: visible;
 }
 .hilite {
-    background-color: #ccc;
+    border: 1px solid red;
 }
 .autocomplete-suggestions {
     border: 1px solid lightgrey !important;
@@ -96,29 +122,72 @@ input:focus {
 }
 #qs {
     margin-top: 2em;
-    font-family: sans-serif;
-    font-size: 0.9em;
+    /* font-family: sans-serif;
+    font-size: 0.9em; */
 }
+
 /* Larger than mobile */
-@media (min-width: 300px) {
+@media only screen 
+  and (min-width: 320px) 
+  and (max-width: 540px) {
+    code {
+        max-width: 500px !important;
+    }
 }
 
 /* Larger than phablet */
-@media (min-width: 550px) {
+@media only screen 
+  and (min-width: 550px) 
+  and (max-width: 740px) {
+    p, li {
+        font-size: 100%;
+    }
     .fs {
         width: 80%;
+    }
+    code {
+        max-width: 700px !important;
     }
 }
 
 /* Larger than tablet */
-@media (min-width: 750px) {
+@media only screen 
+  and (min-width: 750px) 
+  and (max-width: 990px) {
+    p, li {
+        font-size: 100%;
+    }
+    .fs {
+        width: 80%;
+    }
+    code {
+        max-width: 960px !important;
+    }
 }
 
 /* Larger than desktop */
-@media (min-width: 1000px) {
+@media only screen 
+  and (min-width: 1000px) {
+    p, li {
+        font-size: 100%;
+    }
+    .fs {
+        width: 80%;
+    }
+    code {
+        max-width: 960px !important;
+    }
 }
 
 /* Larger than Desktop HD */
 @media (min-width: 1200px) {
+    p, li {
+        font-size: 100%;
+    }
+    .fs {
+        width: 80%;
+    }
+    code {
+        max-width: 960px !important;
+    }
 }
-

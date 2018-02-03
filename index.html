@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/skeleton.css">
     <link rel="stylesheet" href="css/fancysearch.css">
+    <link rel="stylesheet" href="highlight/styles/agate.css">
     <link rel="stylesheet" href="JavaScript-autoComplete/auto-complete.css">
 </head>
 
@@ -44,27 +45,34 @@
         <div class="twelve columns">
             <h4>Fancy Search</h4>
         
-            <p>Faceted search for multiple keys and values</p>
-            <div id="fs" class="fs"></div>
-            <div id="foo"></div>
-            <button class="button-primary" id="go">Go</button>
-            
-            <pre class="u-cf"><code id="qs" class="off"></code></pre>
+            <p>Faceted search for multiple keys and values from local data</p>
+            <div id="fs1" class="fs"></div>
+            <!-- <div id="foo"></div> -->
+            <button class="button-primary" id="go1">Go</button>
+            <br clear="both">
+            <pre><code id="qs1" class="off"></code></pre>
 
-            <h4>Installation and Usage</h4>
+            <p>Faceted search for multiple keys and values from ajax data</p>
+            <div id="fs2" class="fs"></div>
+            <!-- <div id="foo"></div> -->
+            <button class="button-primary" id="go2">Go</button>
+            <br clear="both">
+            <pre><code id="qs2" class="off"></code></pre>
+
+            <h4 style="margin-top: 5rem;">Installation and Usage</h4>
         
             <ul>
                 <li>In your web page, add links to Pixabay's <a href="https://goodies.pixabay.com/javascript/auto-complete/demo.html" target="_blank">autoComplete</a> JS and CSS</li>
                 <li>Add links to <a href="https://github.com/punkish/fancysearch" target="_blank">fancySearch</a> JS and CSS</li>
                 <li>Add link to your <code>facets</code> data, either inline or as a separate JS</li>
                 <li>Create the search div</li>
+                <li>Create a new instance of <code>fancysearch</code></li>
                 <li>Add 'click' <code>eventListener</code> to your form button to execute <code>fancySearch.result()</code></li>
                 <li>Initialize <code>fancySearch.init()</code></li>
             </ul>
 
             <p>Your web page will look something as follows:<br>
-                <pre class="u-cf"><code>
-&lt;head&gt;
+                <pre><code>&lt;head&gt;
 …
 &lt;link rel=&quot;stylesheet&quot; href=&quot;path/to/fancysearch.css&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;path/to/auto-complete.css&quot;&gt;
@@ -78,51 +86,130 @@
 &lt;script src=&quot;path/to/fancysearch.js&quot;&gt;&lt;/script&gt;
 &lt;script&gt;
 
-    // The following can also be loaded via an external JS
-    const facets = [
-        {   "key": "free text", 
-            "values": [], 
-            "noDuplicates": true },
-        {   "key": "authors", 
-            "values": ["William Shakespeare, Rabindranath Tagore, Max Weber, Charles Baudelaire" …], 
-            "noDuplicates": true },
-        {   "key": "countries", 
-            "values": ["Afghanistan","Aland Islands","Albania","Algeria" …], 
-            "noDuplicates": false }
-    ];
+// local data
+const facets = [
+    {   "key": "free text", 
+        "values": [], 
+        "noDuplicates": true },
+    {   "key": "authors", 
+        "values": ["William Shakespeare", "Rabindranath Tagore", "Max Weber", "Charles Baudelaire"], 
+        "noDuplicates": true },
+    {   "key": "countries", 
+        "values": ["Afghanistan","Aland Islands","Albania","Algeria"], 
+        "noDuplicates": false }
+];
 
-    window.onload = function() {
-        document.getElementById('go').addEventListener('click', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
+// values are the URI endpoints for getting the values as arrays via ajax calls
+const facets = [
+    {   "key": "text", 
+        "values": [], 
+        "noDuplicates": true },
+    {   "key": "authors", 
+        "values": "http://localhost:3030/authors", 
+        "noDuplicates": true },
+    {   "key": "keywords", 
+        "values": "http://localhost:3030/keywords", 
+        "noDuplicates": false }
+];
 
-            let query = fancySearch.result();
-            
-            // Do whatever you want with the query, for
-            // example, send it to the server to get 
-            // results. Since the result is a JSON object, 
-            // you may want to stringify it first with 
-            // `JSON.stringify(query)` if you want to display 
-            // it on the web page
-        });
+window.onload = function() {
 
-        // Initialize fancySearch()
-        //   selector: The 'div' you create above. It can have
-        //      any id, but don't change its className
-        //   facets: The data structure you created to hold
-        //      the facets with which you want to search
-        fancySearch.init(document.getElementById('fs'), facets);
-    };
+    // with local data
+    const fs1 = document.getElementById('fs1');
+    const qs1 = document.getElementById('qs1');
+    const go1 = document.getElementById('go1');
+
+    // create a new instance of fancySearch()
+    const widget1 = new fancySearch;
+
+    // Initialize fancySearch()
+    //   selector: The 'div' you create above. It can have
+    //      any id, but don't change its className
+    //   facets: The data structure you created to hold
+    //      the facets with which you want to search
+    widget1.init(fs1, facetsLocal);
+    go1.addEventListener('click', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        let query = widget1.result();
+
+        // Do whatever you want with the query, for
+        // example, send it to the server to get 
+        // results. Since the result is a JSON object, 
+        // you may want to stringify it first with 
+        // `JSON.stringify(query)` if you want to display 
+        // it on the web page
+        qs1.innerHTML = JSON.stringify(query, null, 2);
+        qs1.className = 'json on';
+        hljs.highlightBlock(qs1);
+    });
+
+    // with ajax data
+    const fs2 = document.getElementById('fs2');
+    const qs2 = document.getElementById('qs2');
+    const go2 = document.getElementById('go2');
+
+    // create a new instance of fancySearch()
+    const widget2 = new fancySearch;
+
+    // Initialize fancySearch()
+    //   selector: The 'div' you create above. It can have
+    //      any id, but don't change its className
+    //   facets: The data structure you created to hold
+    //      the facets with which you want to search
+    widget2.init(fs2, facetsAjax);
+    go2.addEventListener('click', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        let query = widget2.result();
+
+        // Do whatever you want with the query, for
+        // example, send it to the server to get 
+        // results. Since the result is a JSON object, 
+        // you may want to stringify it first with 
+        // `JSON.stringify(query)` if you want to display 
+        // it on the web page
+        qs2.innerHTML = JSON.stringify(query, null, 2);
+        qs2.className = 'json on';
+        hljs.highlightBlock(qs2);
+    });
+};
 &lt;/script&gt;
                 </code></pre>
             </p>
         </div>
     </div>
 </div>
+<script src="highlight/highlight.pack.js"></script>
 <script src="JavaScript-autoComplete/auto-complete.js"></script>
 <script src="js/fancysearch.js"></script>
-<script src="js/facets.js"></script>
 <script type="text/javascript">
+const facetsLocal = [
+    {   "key": "free text", 
+        "values": [], 
+        "noDuplicates": true },
+    {   "key": "authors", 
+        "values": ["William Shakespeare", "Rabindranath Tagore", "Max Weber", "Charles Baudelaire"], 
+        "noDuplicates": true },
+    {   "key": "countries", 
+        "values": ["Afghanistan","Aland Islands","Albania","Algeria"], 
+        "noDuplicates": false }
+];
+
+const facetsAjax = [
+    {   "key": "text", 
+        "values": [], 
+        "noDuplicates": true },
+    {   "key": "authors", 
+        "values": "http://zenodeo.punkish.org/v1/authors", 
+        "noDuplicates": false },
+    {   "key": "keywords", 
+        "values": "http://zenodeo.punkish.org/v1/keywords", 
+        "noDuplicates": false }
+];
+
 const fillGhastly = function(selector, facet, choices, multiple) {
 
     let html = multiple ? 
@@ -136,23 +223,44 @@ const fillGhastly = function(selector, facet, choices, multiple) {
     selector.innerHTML = html;
 };
 
+hljs.initHighlightingOnLoad();
+
 window.onload = function() {
 
-    fillGhastly(document.getElementById('au'), 'authors', facets[1]['values'], true);
-    fillGhastly(document.getElementById('cn'), 'countries', facets[2]['values'], false);
+    fillGhastly(document.getElementById('au'), 'authors', facetsLocal[1]['values'], true);
+    fillGhastly(document.getElementById('cn'), 'countries', facetsLocal[2]['values'], false);
 
-    const qs = document.getElementById('qs');
-    
-    document.getElementById('go').addEventListener('click', function(event) {
+    // with local data
+    const fs1 = document.getElementById('fs1');
+    const qs1 = document.getElementById('qs1');
+    const go1 = document.getElementById('go1');
+    const widget1 = new fancySearch;
+    widget1.init(fs1, facetsLocal);
+    go1.addEventListener('click', function(event) {
         event.preventDefault();
         event.stopPropagation();
 
-        let query = fancySearch.result();
-        qs.innerHTML = JSON.stringify(query);
-        qs.className = 'on';
+        let query = widget1.result();
+        qs1.innerHTML = JSON.stringify(query, null, 2);
+        qs1.className = 'json on';
+        hljs.highlightBlock(qs1);
     });
+    
+    // with ajax data
+    const fs2 = document.getElementById('fs2');
+    const qs2 = document.getElementById('qs2');
+    const go2 = document.getElementById('go2');
+    const widget2 = new fancySearch;
+    widget2.init(fs2, facetsAjax);
+    go2.addEventListener('click', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
 
-    fancySearch.init(document.getElementById('fs'), facets);
+        let query = widget2.result();
+        qs2.innerHTML = JSON.stringify(query, null, 2);
+        qs2.className = 'json on';
+        hljs.highlightBlock(qs2);
+    });
 };
 </script>
 </body>
